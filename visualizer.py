@@ -50,9 +50,7 @@ class Visualizer:
       pygame.display.flip()
       pygame.time.wait(self.delay)
 
-# visualizer = Visualizer(600, 600)
-
-# visualizer.update([1, 2, 3, 7, 5, 6, 4, 8, 9, 10], 3)
-# visualizer.update([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 6)
-
-# visualizer.replay()
+    while 1:
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT or event.type == pygame.KEYDOWN:
+          return
