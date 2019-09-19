@@ -238,3 +238,40 @@ end_time = time.perf_counter_ns()
 print('Shell Sort')
 print(f'Time: {end_time - start_time:,}ns')
 print()
+
+# Comb Sort
+#
+# Data structure: Array
+#
+# Time complexity:
+#   Worst:    O(n^2)
+#   Best:
+#   Average:
+#
+# Worst-case space complexity:
+#   Total: O(1)
+def comb_sort(lst, shrink):
+  length = len(lst)
+  gap = length
+  sorted = False
+
+  while not sorted:
+    gap = int(gap / shrink)
+    if gap <= 1:
+      gap = 1
+      sorted = True
+    i = 0
+    while i < length - gap:
+      if lst[i + gap] < lst[i]:
+        lst[i + gap], lst[i] = lst[i], lst[i + gap]
+        sorted = False
+      i += 1
+  return lst
+
+start_time = time.perf_counter_ns()
+sorted = comb_sort(gen_list[:], 1.3)
+end_time = time.perf_counter_ns()
+
+print('Comb Sort')
+print(f'Time: {end_time - start_time:,}ns')
+print()
