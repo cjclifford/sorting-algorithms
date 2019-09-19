@@ -30,10 +30,10 @@ class Visualizer:
     for event in self.history:
       self.screen.fill(self.white)
       col_width = self.width / length
+      height_interval = int(self.height / length)
 
       for i in range(length):
-        height_interval = int(self.height / length)
-        col_height = height_interval * event['list'][i]
+        col_height = height_interval * event['list'][i] + height_interval
 
         rect_col = pygame.Rect(i * col_width, self.height - col_height, col_width, col_height)
         rect_gap = pygame.Rect(i * col_width, self.height - col_height, col_width, col_height)
