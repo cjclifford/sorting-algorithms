@@ -69,3 +69,34 @@ end_time = time.perf_counter_ns()
 print('Insertion Sort')
 print(f'Time: {end_time - start_time:,}ns')
 print()
+
+# Selection Sort
+#
+# Iterates through each element in a list, swapping it's value with the
+# smallest value ahead of it.
+#
+# Data structure: Array
+#
+# Time complexity:
+#   Worst:    O(n^2) comparisons,
+#             O(n) swaps
+#   Best:     O(n^2) comparisons,
+#             O(n) swaps
+#   Average:  O(n^2) comparisons,
+#             O(n) swaps
+#
+# Worst-case space complexity:
+#   Auxillary:  O(1)
+def selection_sort(lst):
+  for i in lst:
+    min_item = min(lst[lst.index(i):])
+    lst[lst.index(min_item)], lst[lst.index(i)] = lst[lst.index(i)], lst[lst.index(min_item)]
+  return lst
+
+start_time = time.perf_counter_ns()
+sorted = selection_sort(gen_list[:])
+end_time = time.perf_counter_ns()
+
+print('Selection Sort')
+print(f'Time: {end_time - start_time:,}ns')
+print()
