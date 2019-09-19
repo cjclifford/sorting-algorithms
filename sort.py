@@ -204,3 +204,37 @@ end_time = time.perf_counter_ns()
 print('Heap Sort')
 print(f'Time: {end_time - start_time:,}ns')
 print()
+
+# Shell Sort
+#
+# Data structure: Array
+#
+# Time complexity:
+#   Worst:    O(n^2) worst known worst case gap sequence,
+#             O(n log n^2) best known worst case gap sequence
+#   Best:     O(n log n) most gap sequences,
+#             O(n log n^2) best known worst case gap sequence
+#   Average:  depends on the sequence
+#
+# Worst-case space complexity:
+#   Total:      O(n)
+#   Auxillary:  O(1)
+def shell_sort(lst, gaps):
+  length = len(lst)
+  for gap in gaps:
+    for i in range(length - gap):
+      j = i + gap
+      while j >= gap and lst[j - gap] > lst[j]:
+        lst[j], lst[j - gap] = lst[j - gap], lst[j]
+        j -= gap
+  return lst
+
+gaps = [10, 5, 3, 2, 1]
+
+start_time = time.perf_counter_ns()
+sorted = shell_sort(gen_list[:], gaps)
+end_time = time.perf_counter_ns()
+
+print('Shell Sort')
+print(f'Time: {end_time - start_time:,}ns')
+print()
