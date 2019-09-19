@@ -275,3 +275,40 @@ end_time = time.perf_counter_ns()
 print('Comb Sort')
 print(f'Time: {end_time - start_time:,}ns')
 print()
+
+# Cocktail Shaker Sort
+#
+# Data structure: Array
+#
+# Time complexity:
+#   Worst:    O(n^2)
+#   Best:     O(n)
+#   Average:  O(n^2)
+#
+# Worst-case space complexity:
+#   Total: O(1)
+def cocktail_shaker_sort(lst):
+  start = 0
+  end = len(lst)
+  while 1:
+    sorted = True
+    for i in range(start, end - 1):
+      if lst[i + 1] < lst[i]:
+        lst[i + 1], lst[i] = lst[i], lst[i + 1]
+        sorted = False
+    for i in range(end - 1, start, -1):
+      if lst[i - 1] > lst[i]:
+        lst[i - 1], lst[i] = lst[i], lst[i - 1]
+        sorted = False
+    if sorted:
+      return lst
+    end -= 1
+    start += 1
+
+start_time = time.perf_counter_ns()
+sorted = cocktail_shaker_sort(gen_list[:])
+end_time = time.perf_counter_ns()
+
+print('Cocktail Shaker Sort')
+print(f'Time: {end_time - start_time:,}ns')
+print()
