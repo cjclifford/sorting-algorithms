@@ -100,3 +100,53 @@ end_time = time.perf_counter_ns()
 print('Selection Sort')
 print(f'Time: {end_time - start_time:,}ns')
 print()
+
+# Merge Sort
+#
+# Divides the unsorted list into sublists, each containing one element.
+# Repeatedly merges the sublists into new sorted lists until only one sublist
+# remains.
+#
+# Data structure: Array
+#
+# Time complexity:
+#   Worst:    O(n log n)
+#   Best:     O(n log n) typical,
+#             O(n) natural variant
+#   Average:  O(n log n)
+#
+# Worst-case space complexity:
+#   Total:      O(n)
+#   Auxillary:  O(n),
+#               O(1) with linked-lists
+def merge_sort(lst):
+  if len(lst) <= 1:
+    return lst
+  middle = int(len(lst) / 2)
+  left = merge_sort(lst[:middle])
+  right = merge_sort(lst[middle:])
+
+  return merge(left, right)
+
+def merge(left, right):
+  result = []
+  while len(left) is not 0 and len(right) is not 0:
+    if left[0] < right[0]:
+      result.append(left[0])
+      left = left[1:]
+    else:
+      result.append(right[0])
+      right = right[1:]
+  for i in left:
+    result.append(i)
+  for i in right:
+    result.append(i)
+  return result
+
+start_time = time.perf_counter_ns()
+sorted = merge_sort(gen_list[:])
+end_time = time.perf_counter_ns()
+
+print('Merge Sort')
+print(f'Time: {end_time - start_time:,}ns')
+print()
