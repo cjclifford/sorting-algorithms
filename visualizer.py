@@ -9,17 +9,16 @@ class Visualizer:
 
   history = []
 
-  def __init__(self, width, height, delay):
+  def __init__(self, width, height):
     self.window_size = self.width, self.height = width, height
-    self.delay = delay
 
-  def update(self, lst, item):
-    self.history.append({'list': lst, 'item': item})
+  def update(self, lst, items):
+    self.history.append({'list': lst, 'items': items})
 
   def reset(self):
     self.history = []
 
-  def replay(self):
+  def replay(self, delay):
     pygame.init()
     self.screen = pygame.display.set_mode(self.window_size)
 
@@ -39,7 +38,7 @@ class Visualizer:
         rect_gap = pygame.Rect(i * col_width, self.height - col_height, col_width, col_height)
         rect_top = pygame.Rect(i * col_width, self.height - col_height, col_width, height_interval)
 
-        if i is event['item']:
+        if i in event['items']:
           pygame.draw.rect(self.screen, self.red, rect_col)
           # play sound
         else:
@@ -48,7 +47,7 @@ class Visualizer:
         pygame.draw.rect(self.screen, self.white, rect_col, 1)
 
       pygame.display.flip()
-      pygame.time.wait(self.delay)
+      pygame.time.wait(delay)
 
     while 1:
       for event in pygame.event.get():
