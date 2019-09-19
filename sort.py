@@ -312,3 +312,44 @@ end_time = time.perf_counter_ns()
 print('Cocktail Shaker Sort')
 print(f'Time: {end_time - start_time:,}ns')
 print()
+
+# Quick Sort
+#
+# Data structure:
+#
+# Time complexity:
+#   Worst:    O(n^2)
+#   Best:     O(n log n) simple partition
+#             O(n) three-way partition and equal keys
+#   Average:  O(n log n)
+#
+# Worst-case space complexity:
+#   Auxillary (naive):  O(n)
+#   Auxillary:          O(log n)
+def quick_sort(lst, lo, hi):
+  if lo < hi:
+    p = partition(lst, lo, hi)
+    quick_sort(lst, lo, p)
+    quick_sort(lst, p + 1, hi)
+  return lst
+
+def partition(lst, lo, hi):
+  pivot = lst[int(lo + (hi - lo) / 2)]
+  while 1:
+    while lst[lo] < pivot:
+      lo += 1
+    while lst[hi] > pivot:
+      hi -= 1
+    if lo >= hi:
+      return hi
+    lst[lo], lst[hi] = lst[hi], lst[lo]
+    lo += 1
+    hi -= 1
+
+start_time = time.perf_counter_ns()
+sorted = quick_sort(gen_list[:], 0, len(gen_list) - 1)
+end_time = time.perf_counter_ns()
+
+print('Quick Sort')
+print(f'Time: {end_time - start_time:,}ns')
+print()
