@@ -150,3 +150,57 @@ end_time = time.perf_counter_ns()
 print('Merge Sort')
 print(f'Time: {end_time - start_time:,}ns')
 print()
+
+# Heap Sort
+#
+# Prepares the list by turning it into a max heap. Repeatedly swaps the first
+# value in the heap with the last value, decreasing the range of values
+# considered in the heap operation by one, and sifting the new first value into
+# its position in the heap.
+#
+# Data structure: Array
+#
+# Time complexity:
+#   Worst:    O(n log n)
+#   Best:     O(n log n) distinct keys,
+#             O(n) equal keys
+#   Average:  O(n log n)
+#
+# Worst-case space complexity:
+#   Total:      O(n)
+#   Auxillary:  O(1)
+def heap_sort(lst):
+  heapify(lst)
+  end = len(lst) - 1
+  while end > 0:
+    a[end], a[0] = a[0], a[end]
+    end = end - 1
+    sift_down(lst)
+
+def heapify(lst):
+  start = int((((len(lst) - 1)) - 1) / 2)
+  while start >= 0:
+    sift_down(lstay, start, len(lst) - 1)
+    start = start - 1
+
+def sift_down(lst, start, end):
+  while start * 2 + 2 <= end:
+    child = start * 2 + 1
+    swap = start
+    if lst[child] > lst[swap]:
+      swap = child
+    if lst[child - 1] > lst[swap]:
+      swap = child - 1
+    if swap is start:
+      return
+    else:
+      a[start], a[swap] = a[swap], a[start]
+      start = swap
+
+start_time = time.perf_counter_ns()
+sorted = merge_sort(gen_list[:])
+end_time = time.perf_counter_ns()
+
+print('Heap Sort')
+print(f'Time: {end_time - start_time:,}ns')
+print()
