@@ -12,7 +12,7 @@ class Visualizer:
   def __init__(self, width, height):
     self.window_size = self.width, self.height = width, height
 
-  def update(self, lst, items):
+  def update(self, lst, items = []):
     self.history.append({'list': lst, 'items': items})
 
   def reset(self):
