@@ -1,99 +1,4 @@
-import sys, time, random, visualizer
-
-vis = visualizer.Visualizer(600, 600)
-
-def main():
-
-  gen_list = [i for i in range(100)]
-  random.shuffle(gen_list)
-
-  args = [arg.lower() for arg in sys.argv[1:]]
-  if 'bubble' in args:
-    start_time = time.perf_counter_ns()
-    bubble_sort(gen_list[:])
-    end_time = time.perf_counter_ns()
-
-    vis.replay(0)
-    vis.reset()
-
-    print('Bubble Sort')
-    print(f'Time: {end_time - start_time:,}ns\n')
-
-  elif 'insertion' in args:
-    start_time = time.perf_counter_ns()
-    insertion_sort(gen_list[:])
-    end_time = time.perf_counter_ns()
-
-    vis.replay(0)
-    vis.reset()
-
-    print('Insertion Sort')
-    print(f'Time: {end_time - start_time:,}ns\n')
-
-  elif 'selection' in args:
-    start_time = time.perf_counter_ns()
-    selection_sort(gen_list[:])
-    end_time = time.perf_counter_ns()
-
-    vis.replay(0)
-    vis.reset()
-
-    print('Selection Sort')
-    print(f'Time: {end_time - start_time:,}ns\n')
-  elif 'merge' in args:
-    pass
-  elif 'heap' in args:
-    start_time = time.perf_counter_ns()
-    heap_sort(gen_list[:])
-    end_time = time.perf_counter_ns()
-
-    vis.replay(0)
-    vis.reset()
-
-    print('Heap Sort')
-    print(f'Time: {end_time - start_time:,}ns\n')
-  elif 'shell' in args:
-    gaps = [10, 5, 3, 2, 1]
-
-    start_time = time.perf_counter_ns()
-    shell_sort(gen_list[:], gaps)
-    end_time = time.perf_counter_ns()
-
-    vis.replay(0)
-    vis.reset()
-
-    print('Shell Sort')
-    print(f'Time: {end_time - start_time:,}ns\n')
-  elif 'comb' in args:
-    start_time = time.perf_counter_ns()
-    comb_sort(gen_list[:], 1.3)
-    end_time = time.perf_counter_ns()
-
-    vis.replay(0)
-    vis.reset()
-
-    print('Comb Sort')
-    print(f'Time: {end_time - start_time:,}ns\n')
-  elif 'cocktail' in args:
-    start_time = time.perf_counter_ns()
-    cocktail_shaker_sort(gen_list[:])
-    end_time = time.perf_counter_ns()
-
-    vis.replay(0)
-    vis.reset()
-
-    print('Cocktail Shaker Sort')
-    print(f'Time: {end_time - start_time:,}ns\n')
-  elif 'quick' in args:
-    start_time = time.perf_counter_ns()
-    quick_sort(gen_list[:], 0, len(gen_list) - 1)
-    end_time = time.perf_counter_ns()
-
-    vis.replay(0)
-    vis.reset()
-
-    print('Quick Sort')
-    print(f'Time: {end_time - start_time:,}ns\n')
+import sys
 
 # Bubble Sort
 #
@@ -111,7 +16,7 @@ def main():
 #
 # Worst-case space complexity:
 #   Auxillary: O(1)
-def bubble_sort(lst):
+def bubble_sort(lst, vis):
   length = len(lst) - 1
   while 1:
     sorted = True
@@ -123,6 +28,7 @@ def bubble_sort(lst):
         lst[i + 1], lst[i] = lst[i], lst[i + 1]
         sorted = False
     if sorted:
+      vis.update(lst[:])
       return lst
     length -= 1
 
@@ -141,7 +47,7 @@ def bubble_sort(lst):
 # Worst-case space complexity:
 #   Total:      O(n)
 #   Auxillary:  O(1)
-def insertion_sort(lst):
+def insertion_sort(lst, vis):
   for i in range(len(lst)):
     j = i
     vis.update(lst[:], [i])
@@ -169,9 +75,15 @@ def insertion_sort(lst):
 #
 # Worst-case space complexity:
 #   Auxillary:  O(1)
-def selection_sort(lst):
+def selection_sort(lst, vis):
   for i in range(len(lst)):
-    min_item = min(lst[i:])
+    # min_item = min(lst[i:])
+    min_item = sys.maxsize
+    for j in range(i, len(lst)):
+      vis.update(lst[:], [j])
+      if lst[j] < min_item:
+        min_item = lst[j]
+    print(min_item)
     vis.update(lst[:], [i, lst.index(min_item)])
     lst[lst.index(min_item)], lst[i] = lst[i], lst[lst.index(min_item)]
   vis.update(lst[:])
@@ -195,13 +107,12 @@ def selection_sort(lst):
 #   Total:      O(n)
 #   Auxillary:  O(n),
 #               O(1) with linked-lists
-def merge_sort(lst):
+def merge_sort(lst, vis):
   if len(lst) <= 1:
     return lst
   middle = int(len(lst) / 2)
   left = merge_sort(lst[:middle])
   right = merge_sort(lst[middle:])
-
   return merge(left, right)
 
 def merge(left, right):
@@ -245,22 +156,22 @@ def merge(left, right):
 # Worst-case space complexity:
 #   Total:      O(n)
 #   Auxillary:  O(1)
-def heap_sort(lst):
-  heapify(lst)
+def heap_sort(lst, vis):
+  heapify(lst, vis)
   end = len(lst) - 1
   while end > 0:
     lst[end], lst[0] = lst[0], lst[end]
     end -= 1
-    sift_down(lst, 0, end)
+    sift_down(lst, 0, end, vis)
   return lst
 
-def heapify(lst):
+def heapify(lst, vis):
   start = int(((len(lst) - 1) - 1) / 2)
   while start >= 0:
-    sift_down(lst, start, len(lst) - 1)
+    sift_down(lst, start, len(lst) - 1, vis)
     start -= 1
 
-def sift_down(lst, start, end):
+def sift_down(lst, start, end, vis):
   while start * 2 + 1 <= end:
     child = start * 2 + 1
     vis.update(lst[:], [start, child])
@@ -290,7 +201,7 @@ def sift_down(lst, start, end):
 # Worst-case space complexity:
 #   Total:      O(n)
 #   Auxillary:  O(1)
-def shell_sort(lst, gaps):
+def shell_sort(lst, gaps, vis):
   length = len(lst)
   for gap in gaps:
     for i in range(length - gap):
@@ -313,7 +224,7 @@ def shell_sort(lst, gaps):
 #
 # Worst-case space complexity:
 #   Total: O(1)
-def comb_sort(lst, shrink):
+def comb_sort(lst, shrink, vis):
   length = len(lst)
   gap = length
   sorted = False
@@ -344,7 +255,7 @@ def comb_sort(lst, shrink):
 #
 # Worst-case space complexity:
 #   Total: O(1)
-def cocktail_shaker_sort(lst):
+def cocktail_shaker_sort(lst, vis):
   start = 0
   end = len(lst)
   while 1:
@@ -366,14 +277,6 @@ def cocktail_shaker_sort(lst):
     if sorted:
       return lst
 
-# start_time = time.perf_counter_ns()
-# sorted = cocktail_shaker_sort(gen_list[:])
-# end_time = time.perf_counter_ns()
-
-# print('Cocktail Shaker Sort')
-# print(f'Time: {end_time - start_time:,}ns')
-# print()
-
 # Quick Sort
 #
 # Data structure:
@@ -387,15 +290,15 @@ def cocktail_shaker_sort(lst):
 # Worst-case space complexity:
 #   Auxillary (naive):  O(n)
 #   Auxillary:          O(log n)
-def quick_sort(lst, lo, hi):
+def quick_sort(lst, lo, hi, vis):
   if lo < hi:
-    p = partition(lst, lo, hi)
-    quick_sort(lst, lo, p)
-    quick_sort(lst, p + 1, hi)
+    p = partition(lst, lo, hi, vis)
+    quick_sort(lst, lo, p, vis)
+    quick_sort(lst, p + 1, hi, vis)
   vis.update(lst[:])
   return lst
 
-def partition(lst, lo, hi):
+def partition(lst, lo, hi, vis):
   pivot = lst[int(lo + (hi - lo) / 2)]
   while 1:
     while lst[lo] < pivot:
@@ -409,6 +312,3 @@ def partition(lst, lo, hi):
     lst[lo], lst[hi] = lst[hi], lst[lo]
     lo += 1
     hi -= 1
-
-if __name__ == '__main__':
-  main()

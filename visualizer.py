@@ -1,4 +1,5 @@
 import sys, pygame
+pygame.init()
 
 class Visualizer:
   black = (0, 0, 0)
@@ -11,6 +12,7 @@ class Visualizer:
 
   def __init__(self, width, height):
     self.window_size = self.width, self.height = width, height
+    self.screen = pygame.display.set_mode(self.window_size)
 
   def update(self, lst, items = []):
     self.history.append({'list': lst, 'items': items})
@@ -18,10 +20,7 @@ class Visualizer:
   def reset(self):
     self.history = []
 
-  def replay(self, delay):
-    pygame.init()
-    self.screen = pygame.display.set_mode(self.window_size)
-
+  def replay(self, delay = 0):
     length = len(self.history[0]['list'])
     min_value = min(self.history[0]['list'])
     max_value = max(self.history[0]['list'])
@@ -35,7 +34,6 @@ class Visualizer:
         col_height = height_interval * event['list'][i] + height_interval
 
         rect_col = pygame.Rect(i * col_width, self.height - col_height, col_width, col_height)
-        rect_gap = pygame.Rect(i * col_width, self.height - col_height, col_width, col_height)
         rect_top = pygame.Rect(i * col_width, self.height - col_height, col_width, height_interval)
 
         if i in event['items']:
@@ -44,7 +42,7 @@ class Visualizer:
         else:
           pygame.draw.rect(self.screen, self.light_gray, rect_col)
         pygame.draw.rect(self.screen, self.black, rect_top)
-        pygame.draw.rect(self.screen, self.white, rect_col, 1)
+        # pygame.draw.rect(self.screen, self.white, rect_col, 1)
 
       pygame.display.flip()
       pygame.time.wait(delay)
